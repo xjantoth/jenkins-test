@@ -31,6 +31,9 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
 
     definition {
         cpsScm {
+            scm {
+                git("${GITHUB_PROJECT}")
+            }
             scriptPath("Jenkinsfile")
         }
     }
