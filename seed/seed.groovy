@@ -1,23 +1,37 @@
-job("${SEED_PROJECT}-${SEED_BRANCH}-build") {
-   description "Building the ${BRANCH} branch."
-      parameters {
-         stringParam('COMMIT', 'HEAD', 'Commit to build')
-      }
-   scm {
-      git {
-         remote {
-            url PROJECT_SCM_URL
-               branch '${COMMIT}'
-         }
-         extensions {
-            wipeOutWorkspace()
-               localBranch BRANCH
-         }
-      }
-   }
-   definition {
-      cpsScm {
-         scriptPath("Jenkinsfile")
-      }
-   }
+freeStyleJob("${SEED_PROJECT}-${SEED_BRANCH}-build") {
+    description "Trigger the build of the ${BRANCH} pipeline."
+
+    logRotator {
+        numToKeep(5)
+        artifactNumToKeep(1)
+    }
+
+    publishers {
+        downstreamParameterized {
+            trigger("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
+                condition('ALWAYS')
+                triggerWithNoParameters(true)
+            }
+        }
+    }
+}
+
+pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
+    description "Building and deploying the ${BRANCH} branch."
+
+    // because stash notifier will not work
+    triggers {
+        scm('')
+    }
+
+    logRotator {
+        numToKeep(5)
+        artifactNumToKeep(1)
+    }
+
+    definition {
+        cpsScm {
+            scriptPath("Jenkinsfile")
+        }
+    }
 }
