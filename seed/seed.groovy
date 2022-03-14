@@ -20,8 +20,8 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
     description "Building and deploying the ${BRANCH} branch."
     // because stash notifier will not work
         parameters {
-                stringParam("PROJECT_SPACE", "xjantoth", 'User space of the project e.g. ')
-                    }
+                stringParam('PROJECT_SPACE', 'xjantoth', 'User space of the project e.g. ')
+        }
 
     triggers {
         scm('')
