@@ -18,10 +18,6 @@ freeStyleJob("${SEED_PROJECT}-${SEED_BRANCH}-build") {
 
 pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
     description "Building and deploying the ${BRANCH} branch."
-// parameters {
-// stringParam('PROJECT_SCM_URL', "${PROJECT_SCM_URL}", 'The Bitbucket project name including the workspace.')
-// }
-
     // because stash notifier will not work
     triggers {
         scm('')
@@ -35,13 +31,18 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
     definition {
         cpsScm {
             scm {
-                git("${PROJECT_SCM_URL}", "${BRANCH}") { node ->
-                    node / 'userRemoteConfigs' / 'hudson.plugins.git.UserRemoteConfig' / 'extensions' << '' {
-                        credentialsId("SSH_KEY_SECURITY")
-                        url("${PROJECT_SCM_URL}")
+                git{
+                    remote {
+                        github("${PROJECT_SCM_URL}", 'https')
+                        credentials("SSH_KEY_SECURITY")
                     }
+                    branches("${BRANCH}")
+                    extensions { }
+
                 }
-                scriptPath("Jenkinsfile")
+            scriptPath('Jenkinsfile')
+
+
             }
         }
 }
