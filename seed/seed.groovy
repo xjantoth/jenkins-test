@@ -33,6 +33,7 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
         cpsScm {
             scm {
                 git("${PROJECT_SCM_URL}", "${BRANCH}")
+                credentials("git")
             }
             scriptPath("Jenkinsfile")
         }
