@@ -19,6 +19,10 @@ freeStyleJob("${SEED_PROJECT}-${SEED_BRANCH}-build") {
 pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
     description "Building and deploying the ${BRANCH} branch."
     // because stash notifier will not work
+        parameters {
+                stringParam("PROJECT_SPACE", "xjantoth", 'User space of the project e.g. ')
+                    }
+
     triggers {
         scm('')
     }
@@ -33,7 +37,7 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
             scm {
                 git{
                     remote {
-                        github("${PROJECT_SCM_URL}", 'https')
+                        github("${PROJECT_SPACE}/${PROJECT}", 'https')
                         credentials("SSH_KEY_SECURITY")
                     }
                     branches("${BRANCH}")
