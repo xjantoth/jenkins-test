@@ -32,10 +32,13 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
     definition {
         cpsScm {
             scm {
-                git("${PROJECT_SCM_URL}", "${BRANCH}")
-                credentials("SSH_KEY_SECURITY")
+                git("${PROJECT_SCM_URL}", "${BRANCH}") { node ->
+                    node / 'userRemoteConfigs' / 'hudson.plugins.git.UserRemoteConfig' {
+                        credentialsId('SSH_KEY_SECURITY')
+                            url('${PROJECT_SCM_URL}')
+                    }
+                }
+                scriptPath("Jenkinsfile")
             }
-            scriptPath("Jenkinsfile")
         }
-    }
 }
