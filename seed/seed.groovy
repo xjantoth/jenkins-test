@@ -42,3 +42,4 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
             }
         }
 }
+}
