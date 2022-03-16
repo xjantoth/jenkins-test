@@ -31,6 +31,14 @@ pipelineJob("${SEED_PROJECT}-${SEED_BRANCH}-builddeploy") {
         numToKeep(5)
         artifactNumToKeep(1)
     }
+    environmentVariables {
+        groovy("""// https://github.com/xjantoth/jenkins-test
+            def tokens = currentBuild.environment.PROJECT_SCM_URL.split('/')
+            String project_space = tokens[3]
+            println(project_space)
+            return [PROJECT_SPACE: project_space]
+        """)
+      }
 
     definition {
         cpsScm {
